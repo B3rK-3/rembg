@@ -20,9 +20,7 @@ from pymatting.foreground.estimate_foreground_ml import estimate_foreground_ml
 from pymatting.util.util import stack_images
 from scipy.ndimage import binary_erosion
 
-from .session_factory import new_session
-from .sessions import sessions, sessions_names
-from .sessions.base import BaseSession
+from u2net import U2netSession
 
 ort.set_default_logger_severity(3)
 
@@ -194,41 +192,17 @@ def fix_image_orientation(img: PILImage) -> PILImage:
     """
     return cast(PILImage, ImageOps.exif_transpose(img))
 
-
-def download_models(models: tuple[str, ...]) -> None:
-    """
-    Download models for image processing.
-    """
-    if len(models) == 0:
-        print("No models specified, downloading all models")
-        models = tuple(sessions_names)
-
-    for model in models:
-        session = sessions.get(model)
-        if session is None:
-            print(f"Error: no model found: {model}")
-            sys.exit(1)
-        else:
-            print(f"Downloading model: {model}")
-            try:
-                session.download_models()
-            except Exception as e:
-                print(f"Error downloading model: {e}")
-
-
 def remove(
     data: Union[bytes, PILImage, np.ndarray],
+    session: U2netSession,
     alpha_matting: bool = False,
     alpha_matting_foreground_threshold: int = 240,
     alpha_matting_background_threshold: int = 10,
     alpha_matting_erode_size: int = 10,
-    session: Optional[BaseSession] = None,
     only_mask: bool = False,
     post_process_mask: bool = False,
     bgcolor: Optional[Tuple[int, int, int, int]] = None,
-    force_return_bytes: bool = False,
-    *args: Optional[Any],
-    **kwargs: Optional[Any],
+    force_return_bytes: bool = False
 ) -> Union[bytes, PILImage, np.ndarray]:
     """
     Remove the background from an input image.
@@ -268,15 +242,12 @@ def remove(
             )
         )
 
-    putalpha = kwargs.pop("putalpha", False)
+    putalpha = False
 
     # Fix image orientation
     img = fix_image_orientation(img)
 
-    if session is None:
-        session = new_session("u2net", *args, **kwargs)
-
-    masks = session.predict(img, *args, **kwargs)
+    masks = session.predict(img)
     cutouts = []
 
     for mask in masks:

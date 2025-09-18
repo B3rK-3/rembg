@@ -7,7 +7,7 @@ import pooch
 from PIL import Image
 from PIL.Image import Image as PILImage
 
-from .base import BaseSession
+from ..base import BaseSession
 
 
 class U2netCustomSession(BaseSession):

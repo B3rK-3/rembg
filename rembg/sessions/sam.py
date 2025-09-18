@@ -10,7 +10,7 @@ from jsonschema import validate
 from PIL import Image
 from PIL.Image import Image as PILImage
 
-from .base import BaseSession
+from ..base import BaseSession
 
 
 def get_preprocess_shape(oldh: int, oldw: int, long_side_length: int):

@@ -16,7 +16,7 @@ from .._version import get_versions
 from ..bg import remove
 from ..session_factory import new_session
 from ..sessions import sessions_names
-from ..sessions.base import BaseSession
+from ..base import BaseSession
 
 
 @click.command(  # type: ignore

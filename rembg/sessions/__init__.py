@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Dict, List
 
-from .base import BaseSession
+from ..base import BaseSession
 
 sessions: Dict[str, type[BaseSession]] = {}
 
@@ -66,11 +66,11 @@ from .u2net_human_seg import U2netHumanSegSession
 
 sessions[U2netHumanSegSession.name()] = U2netHumanSegSession
 
-from .u2net import U2netSession
+from ..u2net import U2netSession
 
 sessions[U2netSession.name()] = U2netSession
 
-from .u2netp import U2netpSession
+from ..u2netp import U2netpSession
 
 sessions[U2netpSession.name()] = U2netpSession
 

@@ -7,7 +7,7 @@ from PIL import Image
 from PIL.Image import Image as PILImage
 from scipy.special import log_softmax
 
-from .base import BaseSession
+from ..base import BaseSession
 
 palette1 = [
     0,
